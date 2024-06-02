@@ -15,5 +15,7 @@
 </template>
 
 <script setup>
-const tab = useTab();
+// const tab = useTab();
+const store = useGstore();
+const { tab } = storeToRefs(store);
 </script>

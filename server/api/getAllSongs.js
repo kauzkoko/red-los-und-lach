@@ -1,8 +1,9 @@
 const baseUrl = "http://localhost:3000";
-const url = `${baseUrl}/api/custom_generate`;
+const url = `${baseUrl}/api/get`;
 
 export default defineEventHandler(async (event) => {
+  const result = await $fetch(url);
   return {
-    lastFiveSongs: [new Array(5).fill("example url")],
+    allSongs: result,
   };
 });

@@ -35,3 +35,10 @@ Deine Worte sind so hohl wie ein verlassenes Meer
 Oh mein Gott, was für ein Drama hier
 Vielen Dank für nichts, ich brauch' einen neuen Gang, Alter!
 `;
+
+export const mockedFunctionOutput = `
+{
+  "output": "Das ist ein Test",
+  "error": null
+}
+`;

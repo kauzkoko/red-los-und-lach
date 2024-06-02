@@ -3,6 +3,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
+  console.log(body.transcript);
 
   const messages = [
     { role: "system", content: body.prompt },
@@ -14,7 +15,7 @@ export default defineEventHandler(async (event) => {
     model: "gpt-3.5-turbo",
   });
 
-  console.log(completion.choices[0]);
+  // console.log(completion.choices[0]);
   let gptOutput = completion.choices[0].message.content;
   console.log(gptOutput);
 

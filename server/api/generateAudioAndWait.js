@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
       tags: body.tags,
       title: body.title,
       make_instrumental: false,
-      wait_audio: false,
+      wait_audio: true,
     },
   });
   console.log(result);

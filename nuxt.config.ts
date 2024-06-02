@@ -6,7 +6,13 @@ export default defineNuxtConfig({
     port: 3333,
   },
   ssr: false,
-  modules: ["vuetify-nuxt-module", "@vueuse/nuxt", "@unocss/nuxt"],
+  modules: [
+    "vuetify-nuxt-module",
+    "@vueuse/nuxt",
+    "@unocss/nuxt",
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
+  ],
   vuetify: {
     moduleOptions: {
       /* module specific options */
@@ -17,5 +23,11 @@ export default defineNuxtConfig({
         unocssIconPrefix: "kack-",
       },
     },
+  },
+  pinia: {
+    storesDirs: ["./stores/**"],
+  },
+  piniaPersistedstate: {
+    storage: "localStorage",
   },
 });
