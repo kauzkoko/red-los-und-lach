@@ -8,6 +8,8 @@ export default defineEventHandler(async (event) => {
     method: "post",
     body: {
       prompt: body.prompt,
+      // tags: "pop rock",
+      // title: "test",
       tags: body.tags,
       title: body.title,
       make_instrumental: false,

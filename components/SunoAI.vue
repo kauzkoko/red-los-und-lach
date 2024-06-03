@@ -34,7 +34,7 @@
                 ></v-textarea>
               </v-expansion-panel-text>
             </v-expansion-panel>
-            <v-expansion-panel title="Song specifics / Genres / Tags / Styles">
+            <v-expansion-panel title="Genres / Tags / Styles">
               <v-expansion-panel-text>
                 <v-textarea
                   :model-value="tags"
@@ -101,31 +101,44 @@
             <v-list-item>
               <audio
                 ref="audio"
-                :src="'https://cdn1.suno.ai/' + id + '.mp3'"
+                :src="'https://audiopipe.suno.ai/?item_id=' + id + '.mp3'"
                 controls
               ></audio
             ></v-list-item>
           </v-list>
         </v-card>
-        <v-list>
-          <v-list-subheader>ALL SONGS</v-list-subheader>
-          <v-list-item prepend-icon="mdi-library" @click="getAllSongs"
-            >Get all songs</v-list-item
-          >
+        <v-expansion-panels multiple class="mx-auto mb-6">
+          <v-expansion-panel title="All Songs">
+            <v-expansion-panel-text>
+              <v-list>
+                <v-list-subheader>ALL SONGS</v-list-subheader>
+                <v-list-item prepend-icon="mdi-library" @click="getAllSongs"
+                  >Get all songs</v-list-item
+                >
 
-          <v-list-item title="Show Songs">
-            <v-text-field
-              v-model="songsAmount"
-              type="number"
-              hide-details
-            ></v-text-field>
-          </v-list-item>
-          <v-list-item
-            v-for="(song, index) in songs.slice(0, songsAmount)"
-            :title="song.title"
-            :subtitle="song.id"
-          ></v-list-item>
-        </v-list>
+                <v-list-item title="Show Songs">
+                  <v-text-field
+                    v-model="songsAmount"
+                    type="number"
+                    hide-details
+                  ></v-text-field>
+                </v-list-item>
+                <v-list-item
+                  v-for="song in songs.slice(0, songsAmount)"
+                  :title="song.title"
+                >
+                  <template
+                    v-slot:subtitle
+                    class="text-12px bg-blue"
+                    style="font-size: 0.7rem !important"
+                  >
+                    {{ song.id }}
+                  </template>
+                </v-list-item>
+              </v-list>
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </v-col>
     </v-row>
   </v-container>

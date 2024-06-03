@@ -8,11 +8,11 @@
         >
       </v-list>
     </v-card>
-    <v-card
-      class="mx-auto mb-6"
-      title="Last transcription"
-      :text="transcription"
-    ></v-card>
+    <v-expansion-panels multiple class="mx-auto mb-6">
+      <v-expansion-panel title="Last transcription">
+        <v-expansion-panel-text>{{ transcription }} </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <v-card class="mx-auto mb-6">
       <v-list>
         <v-list-item title="Transcription read timer">
@@ -70,7 +70,6 @@
           :title="'Last ' + entriesAmount + ' Entries of Transcript'"
         >
           <v-expansion-panel-text>
-            <div>{{ customEntries }}</div>
             <v-slider
               v-model="entriesAmount"
               :max="50"
@@ -87,6 +86,7 @@
                 ></v-text-field>
               </template>
             </v-slider>
+            <div>{{ customEntries }}</div>
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -139,8 +139,5 @@ const timerComputed = computed(() => {
     reset();
   }
   return timer.value - counter.value + "s";
-});
-const lastEntries = computed(() => {
-  return transcription.value.split("\n").slice(-entriesAmount.value).join(" ");
 });
 </script>
