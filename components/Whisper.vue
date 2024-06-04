@@ -171,6 +171,10 @@ const timerComputed = computed(() => {
   }
   return timer.value - counter.value + "s";
 });
+// watch(lockTimer, () => {
+//   console.log("lockTimer changed", lockTimer.value);
+//   if (lockTimer.value === 0) resetTimer();
+// });
 
 //bus and transcription logic
 const bus = useEventBus("auto");

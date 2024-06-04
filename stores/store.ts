@@ -24,6 +24,7 @@ export const useGstore = defineStore("Gstore", {
       lastTitle: "Last Title",
       test: "teswert",
       songsAmount: 3,
+      locked: false,
       songs: [
         {
           title: "mockedlast t",

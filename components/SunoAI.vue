@@ -11,6 +11,10 @@
             <v-list-item prepend-icon="mdi-music" @click="generateAudioAndWait"
               >Generate Audio and Set Player</v-list-item
             >
+            <v-list-item prepend-icon="mdi-counter" @click="triggerSuno"
+              >Trigger Suno</v-list-item
+            >
+            <v-list-item>Locked: {{ locked }}</v-list-item>
           </v-list>
         </v-card>
         <v-card class="mx-auto mb-6">
@@ -65,7 +69,6 @@
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card>
-
         <v-card class="mx-auto mb-6">
           <v-list>
             <v-list-subheader>SONG BY ID</v-list-subheader>
@@ -161,8 +164,9 @@ const {
   songs,
   songsAmount,
   autoplay,
+  locked,
 } = storeToRefs(store);
-
+locked.value = false;
 const audio = ref();
 const { playing, currentTime } = useMediaControls(audio);
 const playSong = () => {
@@ -232,11 +236,19 @@ async function getAllSongs() {
 
 const bus = useEventBus("auto");
 const checkTrigger = async (message) => {
-  console.log("checktrigger in suno");
   if (message === "triggerSuno") {
-    console.log("suno triggered");
-    generateAudioAndWait();
+    console.log("suno triggered and lockTimer on, locked state:", locked.value);
+
+    if (!locked.value) {
+      console.log("will generate");
+      locked.value = true;
+      setTimeout(() => (locked.value = false), 180000);
+      await generateAudioAndWait();
+    }
   }
+};
+const triggerSuno = () => {
+  bus.emit("triggerSuno");
 };
 const unsubscribe = bus.on(checkTrigger);
 </script>

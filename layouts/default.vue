@@ -9,8 +9,8 @@
       </v-tabs>
       <v-spacer></v-spacer>
       <v-btn-toggle mandatory v-model="toggleAuto">
-        <v-btn>Manual</v-btn>
-        <v-btn>Automatic</v-btn>
+        <v-btn>Debug</v-btn>
+        <v-btn>Auto</v-btn>
       </v-btn-toggle>
     </v-app-bar>
     <slot :tab="tab" />

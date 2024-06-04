@@ -41,7 +41,7 @@
                 clearable
                 counter
                 required
-                maxlength="1400"
+                maxlength="2000"
                 @update:model-value="prompt = $event"
               ></v-textarea>
             </v-expansion-panel-text>
@@ -106,6 +106,7 @@ const {
   customEntries,
   autoprompt,
   autoplay,
+  locked
 } = storeToRefs(store);
 
 const generateGptOutput = async () => {
@@ -160,6 +161,7 @@ const generateFunctionArguments = async () => {
 };
 
 const generateBoth = async () => {
+  if (!locked.value) {
   await generateGptOutputFromCustomEntries();
   if (
     gptOutput.value !== "Keine Lyrics" &&
@@ -169,16 +171,23 @@ const generateBoth = async () => {
   ) {
     await generateFunctionArguments();
   }
+}
 };
 
 const bus = useEventBus("auto");
 const checkTrigger = async (message) => {
-  console.log("checktrigger in openai");
   if (message === "triggerOpenAI") {
     console.log(message);
     await generateBoth();
-    if (autoplay.value === 0) {
-      console.log("triggerSuno autoplay active");
+    if (
+      autoplay.value === 0 &&
+      gptOutput.value !== "Keine Lyrics" &&
+      gptOutput.value !== "Keine Lyrics." &&
+      gptOutput.value !== "keine Lyrics" &&
+      gptOutput.value !== "keine Lyrics." &&
+      functionOutput.value !== `{"message":"no song for now"}`
+    ) {
+      console.log("triggerSuno autoplay active and lyrics available");
       bus.emit("triggerSuno");
     }
   }
