@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
   // console.log(completion.choices[0]);
   let gptOutput = completion.choices[0].message.content;
-  console.log(gptOutput);
+  // console.log(gptOutput);
 
   return {
     gptOutput,

@@ -9,12 +9,7 @@
               >Generate Audio Id</v-list-item
             >
             <v-list-item prepend-icon="mdi-music" @click="generateAudioAndWait"
-              >Generate Audio and Wait for it</v-list-item
-            >
-            <v-list-item
-              prepend-icon="mdi-download"
-              @click="generateDownloadLinkFromId"
-              >Generate and Set Audio Url</v-list-item
+              >Generate Audio and Set Player</v-list-item
             >
           </v-list>
         </v-card>
@@ -72,16 +67,14 @@
         </v-card>
 
         <v-card class="mx-auto mb-6">
-          <!-- <v-text-field
-            v-model="downloadLink"
-            :rules="[() => !!title || 'This field is required']"
-            label="Last AudioUrl"
-            placeholder="someweirdurlsomesomesome.com/audio.mp3"
-            required
-          >
-          </v-text-field> -->
           <v-list>
             <v-list-subheader>SONG BY ID</v-list-subheader>
+            <v-list-item
+              prepend-icon="mdi-download"
+              @click="generateDownloadLinkFromId"
+              >Set Audio Url From Id</v-list-item
+            >
+            <v-list-item title="Last Song" :subtitle="lastTitle"></v-list-item>
             <v-list-item>
               <v-text-field
                 v-model="id"
@@ -99,12 +92,27 @@
               </v-text-field
             ></v-list-item>
             <v-list-item>
+              <v-text-field
+                v-model="downloadLink"
+                :rules="[() => !!title || 'This field is required']"
+                label="Last audio_url"
+                required
+              >
+              </v-text-field>
+            </v-list-item>
+            <v-list-item>
               <audio
                 ref="audio"
-                :src="'https://audiopipe.suno.ai/?item_id=' + id + '.mp3'"
+                :src="downloadLink"
                 controls
+                style="background: #f1f3f4"
               ></audio
             ></v-list-item>
+            <v-list-item title="Autoplay">
+              <v-btn-toggle v-model="autoplay">
+                <v-btn icon="mdi-repeat"></v-btn>
+              </v-btn-toggle>
+            </v-list-item>
           </v-list>
         </v-card>
         <v-expansion-panels multiple class="mx-auto mb-6">
@@ -125,14 +133,10 @@
                 </v-list-item>
                 <v-list-item
                   v-for="song in songs.slice(0, songsAmount)"
-                  :title="song.title"
+                  :title="song.title + ' / ' + song.id"
                 >
-                  <template
-                    v-slot:subtitle
-                    class="text-12px bg-blue"
-                    style="font-size: 0.7rem !important"
-                  >
-                    {{ song.id }}
+                  <template v-slot:subtitle>
+                    <div>{{ song.audio_url }}</div>
                   </template>
                 </v-list-item>
               </v-list>
@@ -156,10 +160,11 @@ const {
   lastTitle,
   songs,
   songsAmount,
+  autoplay,
 } = storeToRefs(store);
 
 const audio = ref();
-const { playing, currentTime, duration, volume } = useMediaControls(audio);
+const { playing, currentTime } = useMediaControls(audio);
 const playSong = () => {
   playing.value = true;
 };
@@ -201,9 +206,11 @@ async function generateAudioAndWait() {
     },
   });
   console.log(result);
-  downloadLink.value = result.songs[0].audioUrl;
+  downloadLink.value = result.songs[0].audio_url;
   id.value = result.songs[0].id;
   lastTitle.value = result.songs[0].title;
+  if (autoplay.value === 0) setTimeout(() => playSong(), 500);
+  getAllSongs();
 }
 
 async function generateDownloadLinkFromId() {
@@ -213,7 +220,7 @@ async function generateDownloadLinkFromId() {
       id: id.value,
     },
   });
-  downloadLink.value = result.songs[0].audioUrl;
+  downloadLink.value = result.songs[0].audio_url;
   lastTitle.value = result.songs[0].title;
 }
 
@@ -222,4 +229,14 @@ async function getAllSongs() {
   console.log(result);
   songs.value = result.allSongs;
 }
+
+const bus = useEventBus("auto");
+const checkTrigger = async (message) => {
+  console.log("checktrigger in suno");
+  if (message === "triggerSuno") {
+    console.log("suno triggered");
+    generateAudioAndWait();
+  }
+};
+const unsubscribe = bus.on(checkTrigger);
 </script>

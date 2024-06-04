@@ -34,17 +34,36 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
+    {
+      type: "function",
+      function: {
+        name: "cancel_song",
+        description:
+          "Cancel the song creation process if no lyrics are provided",
+        parameters: {
+          type: "object",
+          properties: {
+            message: {
+              type: "string",
+              description: "The cancellation string: 'no song for now'",
+            },
+          },
+          required: ["message"],
+        },
+      },
+    },
   ];
 
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages: messages,
     tools: tools,
-    tool_choice: { type: "function", function: { name: "generate_song" } },
+    // tool_choice: { type: "function", function: { name: "generate_song" } },
+    tool_choice: "required",
   });
 
   let responseMessage = response.choices[0].message;
-  console.log("tool calls", responseMessage.tool_calls);
+  // console.log("tool calls", responseMessage.tool_calls);
 
   return {
     functionArguments: responseMessage.tool_calls[0].function.arguments,

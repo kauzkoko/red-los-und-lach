@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
       wait_audio: true,
     },
   });
-  console.log(result);
+  // console.log(result);
 
   return {
     songs: result,
